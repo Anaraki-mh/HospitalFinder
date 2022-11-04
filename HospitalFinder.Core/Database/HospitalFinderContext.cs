@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HospitalFinder.Domain.HospitalData;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace HospitalFinder.Core.Database
         {
         }
 
+        public DbSet<Hospital> Hospitals { get; set; }
+        public DbSet<HospitalUpdate> HospitalUpdates { get; set; }
 
     }
 }
