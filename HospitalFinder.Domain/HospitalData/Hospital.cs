@@ -1,4 +1,5 @@
 ﻿using HospitalFinder.Domain.BaseData;
+using HospitalFinder.Domain.HospitalData;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,12 +26,18 @@ namespace HospitalFinder.Domain.HospitalData
         [MaxLength(30)]
         public string Name { get; set; }
 
+        [MaxLength(40)]
+        public string Country { get; set; }
+
+        [MaxLength(40)]
+        public string City { get; set; }
+
         [MaxLength(150)]
-        public string? FullAddress { get; set; }
+        public string? Address { get; set; }
 
-        public decimal Latitude { get; set; }
+        public double Latitude { get; set; }
 
-        public decimal Longtitude { get; set; }
+        public double Longtitude { get; set; }
 
         public int? OpenTime { get; set; }
 
