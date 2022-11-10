@@ -25,8 +25,14 @@ namespace HospitalFinder.Domain.HospitalData
         [MaxLength(30)]
         public string? Name { get; set; }
 
+        [MaxLength(40)]
+        public string Country { get; set; }
+
+        [MaxLength(40)]
+        public string City { get; set; }
+
         [MaxLength(150)]
-        public string? FullAddress { get; set; }
+        public string? Address { get; set; }
 
         public decimal? Latitude { get; set; }
 
@@ -40,6 +46,8 @@ namespace HospitalFinder.Domain.HospitalData
 
         [MaxLength(30)]
         public string? Website { get; set; }
+
+        public bool IsRemoved { get; set; }
 
         #endregion
 
