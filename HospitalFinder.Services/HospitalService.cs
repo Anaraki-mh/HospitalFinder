@@ -54,6 +54,24 @@ namespace HospitalFinder.Services
             _repository.Update(entity);
         }
 
+        public List<Hospital> Search(string keyword, int pageNumber, int numberOfResultsPerPage)
+        {
+            return List().Where(x => x.Name.Contains(keyword) || x.City.Contains(keyword) || x.Country.Contains(keyword))
+                .Skip((pageNumber - 1) * numberOfResultsPerPage)
+                .Take(numberOfResultsPerPage)
+                .ToList();
+        }
+
+        public List<Hospital> FindNearest(double latitude, double longtitude, int numberOfResults)
+        {
+            return List().OrderBy(x =>
+            (latitude - x.Latitude) * (latitude - x.Latitude) +
+            (longtitude - x.Longtitude) * (longtitude - x.Longtitude))
+                .Take(numberOfResults)
+                .ToList();
+        }
+
+
         #endregion
     }
 }
