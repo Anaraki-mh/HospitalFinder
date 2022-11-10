@@ -1,4 +1,5 @@
 ﻿using HospitalFinder.Domain.BaseData;
+using HospitalFinder.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,6 +22,8 @@ namespace HospitalFinder.Domain.HospitalData
 
 
         #region Properties
+
+        public HospitalUpdateOperation OperationType { get; set; }
 
         [MaxLength(30)]
         public string? Name { get; set; }
