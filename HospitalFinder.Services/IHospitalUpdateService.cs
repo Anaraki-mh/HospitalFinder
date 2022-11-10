@@ -6,6 +6,7 @@ namespace HospitalFinder.Services
     {
         HospitalUpdate Create(HospitalUpdate entity);
         void Delete(int id);
+        void Remove(int id);
         HospitalUpdate? FindById(int id);
         List<HospitalUpdate> List();
         void Update(HospitalUpdate entity);

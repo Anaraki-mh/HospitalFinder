@@ -37,6 +37,12 @@ namespace HospitalFinder.Services
         {
             _repository.Delete(FindById(id));
         }
+        public void Remove(int id)
+        {
+            HospitalUpdate entity = FindById(id);
+            entity.IsRemoved = true;
+            _repository.Update(entity);
+        }
 
         public HospitalUpdate? FindById(int id)
         {
@@ -46,7 +52,9 @@ namespace HospitalFinder.Services
 
         public List<HospitalUpdate> List()
         {
-            return _repository.List();
+            return _repository.List()
+                .Where(x => !x.IsRemoved)
+                .ToList();
         }
 
         public void Update(HospitalUpdate entity)
