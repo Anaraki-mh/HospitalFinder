@@ -1,5 +1,6 @@
 using HospitalFinder.Core.DataAccess;
 using HospitalFinder.Core.Database;
+using HospitalFinder.Services;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 
@@ -15,11 +16,9 @@ builder.Services.AddControllers().AddNewtonsoftJson(s =>
     s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 });
 
-//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
-
+builder.Services.AddScoped<IHospitalService, HospitalService>();
+builder.Services.AddScoped<IHospitalUpdateService, HospitalUpdateService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

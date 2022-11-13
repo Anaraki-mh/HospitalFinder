@@ -30,8 +30,4 @@
     <ProjectReference Include="..\HospitalFinder.WebEssentials\HospitalFinder.WebEssentials.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
