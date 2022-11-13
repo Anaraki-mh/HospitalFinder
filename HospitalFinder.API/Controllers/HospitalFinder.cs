@@ -1,4 +1,5 @@
 ﻿using HospitalFinder.API.DTOs;
+using HospitalFinder.Domain.Enums;
 using HospitalFinder.Domain.HospitalData;
 using HospitalFinder.Services;
 using HospitalFinder.WebEssentials.Coordinate;
@@ -18,11 +19,11 @@ namespace HospitalFinder.API.Controllers
         private IHospitalService _hospitalService { get; }
         private IHospitalUpdateService _hospitalUpdateService { get; }
 
-        private Hospital _hospitalEntity { get; set; }
-        private HospitalUpdate _hospitalUpdateEntity { get; set; }
+        private Hospital? _hospitalEntity { get; set; }
+        private HospitalUpdate? _hospitalUpdateEntity { get; set; }
 
-        private HospitalReadDto _hospitalModel { get; set; }
-        private HospitalUpdateCreateDto _hospitalUpdateModel { get; set; }
+        private HospitalReadDto? _hospitalModel { get; set; }
+        private HospitalUpdateCreateDto? _hospitalUpdateModel { get; set; }
         #endregion
 
 
@@ -91,9 +92,61 @@ namespace HospitalFinder.API.Controllers
         [HttpPost]
         public ActionResult<HospitalReadDto> Create(HospitalUpdateCreateDto model)
         {
-            return Ok();
+            if (ModelState.IsValid)
+            {
+                _hospitalUpdateEntity = new HospitalUpdate
+                {
+                    OperationType = HospitalUpdateOperation.Add,
+
+                    Name = model.Name,
+                    City = model.City,
+                    Country = model.Country,
+                    Address = model.Address,
+                    Latitude = model.Latitude,
+                    Longtitude = model.Longtitude,
+                    OpenTime = model.OpenTime,
+                    CloseTime = model.CloseTime,
+                    Telephone = model.Telephone,
+                    Website = model.Website,
+                };
+                _hospitalUpdateService.Create(_hospitalUpdateEntity);
+                return CreatedAtRoute(nameof(Search), new { keyword = _hospitalUpdateEntity.Name }, _hospitalUpdateEntity);
+            }
+            return BadRequest(model);
+
         }
 
+        //PUT api/{id}
+        [HttpPut("{id}")]
+        public ActionResult Update(int id, HospitalUpdateCreateDto model)
+        {
+            _hospitalEntity = _hospitalService.FindById(id);
+
+            if (_hospitalEntity == null)
+                return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                _hospitalUpdateEntity = new HospitalUpdate
+                {
+                    OperationType = HospitalUpdateOperation.Update,
+                    HospitalId = id,
+
+                    Name = model.Name,
+                    City = model.City,
+                    Country = model.Country,
+                    Address = model.Address,
+                    Latitude = model.Latitude,
+                    Longtitude = model.Longtitude,
+                    OpenTime = model.OpenTime,
+                    CloseTime = model.CloseTime,
+                    Telephone = model.Telephone,
+                    Website = model.Website,
+                };
+                _hospitalUpdateService.Create(_hospitalUpdateEntity);
+            }
+            return NoContent();
+        }
 
         #endregion
     }
