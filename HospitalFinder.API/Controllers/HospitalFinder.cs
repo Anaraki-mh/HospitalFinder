@@ -149,7 +149,7 @@ namespace HospitalFinder.API.Controllers
             return NoContent();
         }
 
-        [HttpPost("{latitude}+{longtitude}.{numberOfResults?}")]
+        [HttpGet("{latitude}+{longtitude}.{numberOfResults?}")]
         public ActionResult<IEnumerable<HospitalReadDto>> FindNearest(double latitude, double longtitude, int numberOfResults = 1)
         {
 
