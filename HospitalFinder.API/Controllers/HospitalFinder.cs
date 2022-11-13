@@ -5,6 +5,7 @@ using HospitalFinder.Services;
 using HospitalFinder.WebEssentials.Coordinate;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
 using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 using Convert = HospitalFinder.WebEssentials.Coordinate.Convert;
 
@@ -148,6 +149,33 @@ namespace HospitalFinder.API.Controllers
             return NoContent();
         }
 
+        [HttpPost("{latitude}+{longtitude}.{numberOfResults?}")]
+        public ActionResult<IEnumerable<HospitalReadDto>> FindNearest(double latitude, double longtitude, int numberOfResults = 1)
+        {
+
+            List<Hospital> entityList = _hospitalService.FindNearest(latitude, longtitude, numberOfResults);
+            List<HospitalReadDto> modelList = new List<HospitalReadDto>();
+
+            foreach (Hospital entity in entityList)
+            {
+                modelList.Add(new HospitalReadDto
+                {
+                    Id = entity.Id,
+                    Name = entity.Name,
+                    City = entity.City,
+                    Country = entity.Country,
+                    Address = entity.Address,
+                    Latitude = Convert.ToDMS(entity.Latitude),
+                    Longtitude = Convert.ToDMS(entity.Longtitude),
+                    OpenTime = entity.OpenTime,
+                    CloseTime = entity.CloseTime,
+                    Telephone = entity.Telephone,
+                    Website = entity.Website,
+                    GoogleMapsLink = entity.GoogleMapsLink,
+                });
+            }
+            return Ok(modelList);
+        }
         #endregion
     }
 }
