@@ -23,7 +23,7 @@ namespace HospitalFinder.Domain.HospitalData
 
         #region Properties
 
-        [MaxLength(30)]
+        [MaxLength(75)]
         public string Name { get; set; }
 
         [MaxLength(40)]
@@ -45,11 +45,11 @@ namespace HospitalFinder.Domain.HospitalData
 
         public long? Telephone { get; set; }
 
-        [MaxLength(30)]
+        [MaxLength(50)]
         public string? Website { get; set; }
 
         [MaxLength(75)]
-        public string GoogleMapsLink { get; set; }
+        public string? GoogleMapsLink { get; set; }
 
         #endregion
 

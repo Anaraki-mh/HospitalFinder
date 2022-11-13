@@ -25,7 +25,7 @@ namespace HospitalFinder.Domain.HospitalData
 
         public HospitalUpdateOperation OperationType { get; set; }
 
-        [MaxLength(30)]
+        [MaxLength(75)]
         public string? Name { get; set; }
 
         [MaxLength(40)]
@@ -47,7 +47,7 @@ namespace HospitalFinder.Domain.HospitalData
 
         public long? Telephone { get; set; }
 
-        [MaxLength(30)]
+        [MaxLength(50)]
         public string? Website { get; set; }
 
         public bool IsRemoved { get; set; }
