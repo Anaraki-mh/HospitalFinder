@@ -22,10 +22,10 @@ namespace HospitalFinder.API.DTOs
         public string? Address { get; set; }
 
         [Required]
-        public decimal Latitude { get; set; }
+        public double Latitude { get; set; }
 
         [Required]
-        public decimal Longtitude { get; set; }
+        public double Longtitude { get; set; }
 
         public int? OpenTime { get; set; }
 

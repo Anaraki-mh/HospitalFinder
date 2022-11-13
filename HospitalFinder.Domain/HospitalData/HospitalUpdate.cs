@@ -37,9 +37,9 @@ namespace HospitalFinder.Domain.HospitalData
         [MaxLength(150)]
         public string? Address { get; set; }
 
-        public decimal? Latitude { get; set; }
+        public double? Latitude { get; set; }
 
-        public decimal? Longtitude { get; set; }
+        public double? Longtitude { get; set; }
 
         public int? OpenTime { get; set; }
 
