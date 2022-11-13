@@ -23,8 +23,6 @@ namespace HospitalFinder.API.Controllers
         private Hospital? _hospitalEntity { get; set; }
         private HospitalUpdate? _hospitalUpdateEntity { get; set; }
 
-        private HospitalReadDto? _hospitalModel { get; set; }
-        private HospitalUpdateCreateDto? _hospitalUpdateModel { get; set; }
         #endregion
 
 
