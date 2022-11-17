@@ -36,8 +36,6 @@ namespace HospitalFinder.API.Controllers
             _hospitalEntity = new Hospital();
             _hospitalUpdateEntity = new HospitalUpdate();
 
-            _hospitalModel = new HospitalReadDto();
-            _hospitalUpdateModel = new HospitalUpdateCreateDto();
         }
 
         #endregion
