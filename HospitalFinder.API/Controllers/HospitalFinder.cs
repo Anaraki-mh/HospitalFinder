@@ -45,13 +45,13 @@ namespace HospitalFinder.API.Controllers
 
         //GET api/Search/{keyword}+{resultsPerPage}+{pageNumebr}
         [HttpGet("Search/{keyword}+{resultsPerPage}+{pageNumebr}")]
-        public ActionResult<IEnumerable<HospitalReadDto>> Search(string keyword, int pageNumber = 1, int resultsPerPage = 10)
+        public async Task<ActionResult<IEnumerable<HospitalReadDto>>> SearchAsync(string keyword, int pageNumber = 1, int resultsPerPage = 10)
         {
             if (pageNumber < 1 || resultsPerPage < 1)
                 return BadRequest();
 
             List<HospitalReadDto> modelsList = new List<HospitalReadDto>();
-            List<Hospital> entityList = _hospitalService.Search(keyword, pageNumber, resultsPerPage);
+            List<Hospital> entityList = await _hospitalService.SearchAsync(keyword, pageNumber, resultsPerPage);
 
             if (entityList.Count == 0)
                 return NotFound();
@@ -71,7 +71,7 @@ namespace HospitalFinder.API.Controllers
                     CloseTime = entity.CloseTime,
                     Telephone = entity.Telephone,
                     Website = entity.Website,
-                    GoogleMapsLink = entity.GoogleMapsLink,
+                    GoogleMapsLink = entity.GoogleMapsLink ?? "",
                 });
             }
 
@@ -80,14 +80,14 @@ namespace HospitalFinder.API.Controllers
 
         //GET api/Search/{keyword}
         [HttpGet("Search/{keyword}")]
-        public ActionResult<IEnumerable<HospitalReadDto>> Search(string keyword)
+        public async Task<ActionResult<IEnumerable<HospitalReadDto>>> SearchAsync(string keyword)
         {
-            return Search(keyword, 1, 1);
+            return await SearchAsync(keyword, 1, 1);
         }
 
         //POST api/
-        [HttpPost]
-        public ActionResult<HospitalReadDto> Create(HospitalUpdateCreateDto model)
+        [HttpPost("Create")]
+        public async Task<ActionResult<HospitalReadDto>> CreateAsync(HospitalUpdateCreateDto model)
         {
             if (ModelState.IsValid)
             {
@@ -106,20 +106,21 @@ namespace HospitalFinder.API.Controllers
                     Telephone = model.Telephone,
                     Website = model.Website,
                 };
-                _hospitalUpdateService.Create(_hospitalUpdateEntity);
-                return CreatedAtRoute(nameof(Search), new { keyword = _hospitalUpdateEntity.Name }, _hospitalUpdateEntity);
+                await _hospitalUpdateService.CreateAsync(_hospitalUpdateEntity);
+                return CreatedAtRoute(nameof(SearchAsync), new { keyword = _hospitalUpdateEntity.Name }, _hospitalUpdateEntity);
             }
             return BadRequest(model);
 
         }
 
         //PUT api/{id}
-        [HttpPut("{id}")]
-        public ActionResult Update(int id, HospitalUpdateCreateDto model)
+        // add to == null, .Id == 0
+        [HttpPut("Update/{id}")]
+        public async Task<ActionResult> UpdateAsync(int id, HospitalUpdateCreateDto model)
         {
-            _hospitalEntity = _hospitalService.FindById(id);
+            _hospitalEntity = await _hospitalService.FindByIdAsync(id);
 
-            if (_hospitalEntity == null)
+            if (_hospitalEntity is null || _hospitalEntity?.Id == 0)
                 return NotFound();
 
             if (ModelState.IsValid)
@@ -140,16 +141,16 @@ namespace HospitalFinder.API.Controllers
                     Telephone = model.Telephone,
                     Website = model.Website,
                 };
-                _hospitalUpdateService.Create(_hospitalUpdateEntity);
+                await _hospitalUpdateService.CreateAsync(_hospitalUpdateEntity);
             }
             return NoContent();
         }
 
-        [HttpGet("{latitude}+{longtitude}.{numberOfResults?}")]
-        public ActionResult<IEnumerable<HospitalReadDto>> FindNearest(double latitude, double longtitude, int numberOfResults = 1)
+        [HttpGet("FindNearest/{latitude}+{longtitude}+{numberOfResults?}")]
+        public async Task<ActionResult<IEnumerable<HospitalReadDto>>> FindNearesrtAsync(double latitude, double longtitude, int numberOfResults = 1)
         {
 
-            List<Hospital> entityList = _hospitalService.FindNearest(latitude, longtitude, numberOfResults);
+            List<Hospital> entityList = await _hospitalService.FindNearestAsync(latitude, longtitude, numberOfResults);
             List<HospitalReadDto> modelList = new List<HospitalReadDto>();
 
             foreach (Hospital entity in entityList)
@@ -167,7 +168,7 @@ namespace HospitalFinder.API.Controllers
                     CloseTime = entity.CloseTime,
                     Telephone = entity.Telephone,
                     Website = entity.Website,
-                    GoogleMapsLink = entity.GoogleMapsLink,
+                    GoogleMapsLink = entity.GoogleMapsLink ?? "",
                 });
             }
             return Ok(modelList);

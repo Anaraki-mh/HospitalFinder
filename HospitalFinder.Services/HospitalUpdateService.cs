@@ -28,38 +28,42 @@ namespace HospitalFinder.Services
 
 
         #region Methods
-        public HospitalUpdate Create(HospitalUpdate entity)
+        public async Task<HospitalUpdate> CreateAsync(HospitalUpdate entity)
         {
-            return _repository.Create(entity);
+            return await _repository.CreateAsync(entity);
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            _repository.Delete(FindById(id));
+            await _repository.DeleteAsync(await FindByIdAsync(id));
         }
-        public void Remove(int id)
+        public async Task RemoveAsync(int id)
         {
-            HospitalUpdate entity = FindById(id);
-            entity.IsRemoved = true;
-            _repository.Update(entity);
-        }
-
-        public HospitalUpdate? FindById(int id)
-        {
-            return _repository.List()
-                .FirstOrDefault(x => x.Id == id);
+            HospitalUpdate entity = await FindByIdAsync(id);
+            if (entity != null)
+            {
+                entity.IsRemoved = true;
+                await _repository.UpdateAsync(entity);
+            }
         }
 
-        public List<HospitalUpdate> List()
+        public async Task<HospitalUpdate>? FindByIdAsync(int id)
         {
-            return _repository.List()
-                .Where(x => !x.IsRemoved)
-                .ToList();
+            List<HospitalUpdate> entityList = await ListAsync();
+
+            return entityList?.FirstOrDefault(x => x.Id == id) ?? new HospitalUpdate();
         }
 
-        public void Update(HospitalUpdate entity)
+        public async Task<List<HospitalUpdate>> ListAsync()
         {
-            _repository.Update(entity);
+            List<HospitalUpdate> entityList = await _repository.ListAsync();
+
+            return entityList.Where(x => !x.IsRemoved).ToList() ?? new List<HospitalUpdate>();
+        }
+
+        public async Task UpdateAsync(HospitalUpdate entity)
+        {
+            await _repository.UpdateAsync(entity);
         }
 
         #endregion

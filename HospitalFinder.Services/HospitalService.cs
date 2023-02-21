@@ -28,43 +28,47 @@ namespace HospitalFinder.Services
 
 
         #region Methods
-        public Hospital Create(Hospital entity)
+        public async Task<Hospital> CreateAsync(Hospital entity)
         {
-            return _repository.Create(entity);
+            return await _repository.CreateAsync(entity);
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            _repository.Delete(FindById(id));
+            await _repository.DeleteAsync(await FindByIdAsync(id));
         }
 
-        public Hospital? FindById(int id)
+        public async Task<Hospital>? FindByIdAsync(int id)
         {
-            return _repository.List()
-                .FirstOrDefault(x => x.Id == id);
+            List<Hospital> entityList = await _repository.ListAsync();
+            return entityList?.FirstOrDefault(x => x.Id == id) ?? new Hospital();
         }
 
-        public List<Hospital> List()
+        public async Task<List<Hospital>> ListAsync()
         {
-            return _repository.List();
+            return await _repository.ListAsync();
         }
 
-        public void Update(Hospital entity)
+        public async Task UpdateAsync(Hospital entity)
         {
-            _repository.Update(entity);
+            await _repository.UpdateAsync(entity);
         }
 
-        public List<Hospital> Search(string keyword, int pageNumber, int numberOfResultsPerPage)
+        public async Task<List<Hospital>> SearchAsync(string keyword, int pageNumber, int numberOfResultsPerPage)
         {
-            return List().Where(x => x.Name.Contains(keyword) || x.City.Contains(keyword) || x.Country.Contains(keyword))
-                .Skip((pageNumber - 1) * numberOfResultsPerPage)
-                .Take(numberOfResultsPerPage)
-                .ToList();
+            List<Hospital> entityList = await ListAsync();
+
+            return entityList.Where(x => x.Name.Contains(keyword) || x.City.Contains(keyword) || x.Country.Contains(keyword))
+           .Skip((pageNumber - 1) * numberOfResultsPerPage)
+           .Take(numberOfResultsPerPage)
+           .ToList();
         }
 
-        public List<Hospital> FindNearest(double latitude, double longtitude, int numberOfResults)
+        public async Task<List<Hospital>> FindNearestAsync(double latitude, double longtitude, int numberOfResults)
         {
-            return List().OrderBy(x =>
+            List<Hospital> entityList = await ListAsync();
+
+            return entityList.OrderBy(x =>
             (latitude - x.Latitude) * (latitude - x.Latitude) +
             (longtitude - x.Longtitude) * (longtitude - x.Longtitude))
                 .Take(numberOfResults)

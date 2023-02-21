@@ -4,12 +4,12 @@ namespace HospitalFinder.Services
 {
     public interface IHospitalService
     {
-        Hospital Create(Hospital entity);
-        void Delete(int id);
-        List<Hospital> List();
-        void Update(Hospital entity);
-        Hospital? FindById(int id);
-        List<Hospital> Search(string keyword, int pageNumber, int numberOfResultsPerPage);
-        List<Hospital> FindNearest(double latitude, double longtitude, int numberOfResults);
+        Task<Hospital> CreateAsync(Hospital entity);
+        Task DeleteAsync(int id);
+        Task<List<Hospital>> ListAsync();
+        Task UpdateAsync(Hospital entity);
+        Task<Hospital>? FindByIdAsync(int id);
+        Task<List<Hospital>> SearchAsync(string keyword, int pageNumber, int numberOfResultsPerPage);
+        Task<List<Hospital>> FindNearestAsync(double latitude, double longtitude, int numberOfResults);
     }
 }

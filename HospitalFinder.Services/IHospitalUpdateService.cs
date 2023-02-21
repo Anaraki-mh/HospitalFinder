@@ -4,11 +4,11 @@ namespace HospitalFinder.Services
 {
     public interface IHospitalUpdateService
     {
-        HospitalUpdate Create(HospitalUpdate entity);
-        void Delete(int id);
-        void Remove(int id);
-        HospitalUpdate? FindById(int id);
-        List<HospitalUpdate> List();
-        void Update(HospitalUpdate entity);
+        Task<HospitalUpdate> CreateAsync(HospitalUpdate entity);
+        Task DeleteAsync(int id);
+        Task RemoveAsync(int id);
+        Task<HospitalUpdate>? FindByIdAsync(int id);
+        Task<List<HospitalUpdate>> ListAsync();
+        Task UpdateAsync(HospitalUpdate entity);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using HospitalFinder.Core.Database;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,28 +29,28 @@ namespace HospitalFinder.Core.DataAccess
 
         #region Methods
 
-        public T Create(T entity)
+        public async Task<T> CreateAsync(T entity)
         {
             _context.Set<T>().Add(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public void Delete(T entity)
+        public async Task DeleteAsync(T entity)
         {
             _context.Set<T>().Remove(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public List<T> List()
+        public async Task<List<T>> ListAsync()
         {
-            return _context.Set<T>().ToList();
+            return await _context.Set<T>().ToListAsync();
         }
 
-        public void Update(T entity)
+        public async Task UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         #endregion

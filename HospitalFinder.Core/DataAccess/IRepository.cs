@@ -8,9 +8,9 @@ namespace HospitalFinder.Core.DataAccess
 {
     public interface IRepository<T> where T : class
     {
-        List<T> List();
-        T Create(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        Task<List<T>> ListAsync();
+        Task<T> CreateAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task DeleteAsync(T entity);
     }
 }
