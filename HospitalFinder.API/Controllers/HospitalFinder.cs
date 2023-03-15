@@ -20,9 +20,6 @@ namespace HospitalFinder.API.Controllers
         private IHospitalService _hospitalService { get; }
         private IHospitalUpdateService _hospitalUpdateService { get; }
 
-        private Hospital? _hospitalEntity { get; set; }
-        private HospitalUpdate? _hospitalUpdateEntity { get; set; }
-
         #endregion
 
 
@@ -32,10 +29,6 @@ namespace HospitalFinder.API.Controllers
         {
             _hospitalService = hospitalService;
             _hospitalUpdateService = hospitalUpdateService;
-
-            _hospitalEntity = new Hospital();
-            _hospitalUpdateEntity = new HospitalUpdate();
-
         }
 
         #endregion
@@ -43,15 +36,15 @@ namespace HospitalFinder.API.Controllers
 
         #region Methods
 
-        //GET api/Search/{keyword}+{resultsPerPage}+{pageNumebr}
-        [HttpGet("Search/{keyword}+{resultsPerPage}+{pageNumebr}")]
-        public async Task<ActionResult<IEnumerable<HospitalReadDto>>> SearchAsync(string keyword, int pageNumber = 1, int resultsPerPage = 10)
+        //GET api/Search/{keyword}+{numberOfResults}
+        [HttpGet("Search/{keyword}/{numberOfResults?}")]
+        public async Task<ActionResult<IEnumerable<HospitalReadDto>>> SearchAsync(string keyword, int numberOfResults = 1)
         {
-            if (pageNumber < 1 || resultsPerPage < 1)
+            if (numberOfResults < 1)
                 return BadRequest();
 
             List<HospitalReadDto> modelsList = new List<HospitalReadDto>();
-            List<Hospital> entityList = await _hospitalService.SearchAsync(keyword, pageNumber, resultsPerPage);
+            List<Hospital> entityList = await _hospitalService.SearchAsync(keyword, numberOfResults);
 
             if (entityList.Count == 0)
                 return NotFound();
@@ -65,8 +58,10 @@ namespace HospitalFinder.API.Controllers
                     City = entity.City,
                     Country = entity.Country,
                     Address = entity.Address,
-                    Latitude = Convert.ToDMS(entity.Latitude),
-                    Longtitude = Convert.ToDMS(entity.Longtitude),
+                    Latitude = entity.Latitude,
+                    Longtitude = entity.Longtitude,
+                    LatitudeDMS = Convert.ToDMS(entity.Latitude),
+                    LongtitudeDMS = Convert.ToDMS(entity.Longtitude),
                     OpenTime = entity.OpenTime,
                     CloseTime = entity.CloseTime,
                     Telephone = entity.Telephone,
@@ -78,20 +73,13 @@ namespace HospitalFinder.API.Controllers
             return Ok(modelsList);
         }
 
-        //GET api/Search/{keyword}
-        [HttpGet("Search/{keyword}")]
-        public async Task<ActionResult<IEnumerable<HospitalReadDto>>> SearchAsync(string keyword)
-        {
-            return await SearchAsync(keyword, 1, 1);
-        }
-
         //POST api/
         [HttpPost("Create")]
         public async Task<ActionResult<HospitalReadDto>> CreateAsync(HospitalUpdateCreateDto model)
         {
             if (ModelState.IsValid)
             {
-                _hospitalUpdateEntity = new HospitalUpdate
+                var hospitalUpdateEntity = new HospitalUpdate
                 {
                     OperationType = HospitalUpdateOperation.Add,
 
@@ -106,26 +94,25 @@ namespace HospitalFinder.API.Controllers
                     Telephone = model.Telephone,
                     Website = model.Website,
                 };
-                await _hospitalUpdateService.CreateAsync(_hospitalUpdateEntity);
-                return CreatedAtRoute(nameof(SearchAsync), new { keyword = _hospitalUpdateEntity.Name }, _hospitalUpdateEntity);
+                await _hospitalUpdateService.CreateAsync(hospitalUpdateEntity);
+                return CreatedAtRoute(nameof(SearchAsync), new { keyword = hospitalUpdateEntity.Name }, hospitalUpdateEntity);
             }
             return BadRequest(model);
 
         }
 
         //PUT api/{id}
-        // add to == null, .Id == 0
         [HttpPut("Update/{id}")]
         public async Task<ActionResult> UpdateAsync(int id, HospitalUpdateCreateDto model)
         {
-            _hospitalEntity = await _hospitalService.FindByIdAsync(id);
+            var hospitalEntity = await _hospitalService.FindByIdAsync(id);
 
-            if (_hospitalEntity is null || _hospitalEntity?.Id == 0)
+            if (hospitalEntity is null || hospitalEntity?.Id == 0)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                _hospitalUpdateEntity = new HospitalUpdate
+                var hospitalUpdateEntity = new HospitalUpdate
                 {
                     OperationType = HospitalUpdateOperation.Update,
                     HospitalId = id,
@@ -141,12 +128,13 @@ namespace HospitalFinder.API.Controllers
                     Telephone = model.Telephone,
                     Website = model.Website,
                 };
-                await _hospitalUpdateService.CreateAsync(_hospitalUpdateEntity);
+                await _hospitalUpdateService.CreateAsync(hospitalUpdateEntity);
             }
             return NoContent();
         }
 
-        [HttpGet("FindNearest/{latitude}+{longtitude}+{numberOfResults?}")]
+        //PUT api/FindNearest/{latitude}/{longtitude}/{numberOfResults}
+        [HttpGet("FindNearest/{latitude}/{longtitude}/{numberOfResults?}")]
         public async Task<ActionResult<IEnumerable<HospitalReadDto>>> FindNearesrtAsync(double latitude, double longtitude, int numberOfResults = 1)
         {
 
@@ -162,8 +150,10 @@ namespace HospitalFinder.API.Controllers
                     City = entity.City,
                     Country = entity.Country,
                     Address = entity.Address,
-                    Latitude = Convert.ToDMS(entity.Latitude),
-                    Longtitude = Convert.ToDMS(entity.Longtitude),
+                    Latitude = entity.Latitude,
+                    Longtitude = entity.Longtitude,
+                    LatitudeDMS = Convert.ToDMS(entity.Latitude),
+                    LongtitudeDMS = Convert.ToDMS(entity.Longtitude),
                     OpenTime = entity.OpenTime,
                     CloseTime = entity.CloseTime,
                     Telephone = entity.Telephone,

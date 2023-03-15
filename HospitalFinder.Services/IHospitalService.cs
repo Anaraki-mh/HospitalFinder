@@ -9,7 +9,7 @@ namespace HospitalFinder.Services
         Task<List<Hospital>> ListAsync();
         Task UpdateAsync(Hospital entity);
         Task<Hospital>? FindByIdAsync(int id);
-        Task<List<Hospital>> SearchAsync(string keyword, int pageNumber, int numberOfResultsPerPage);
+        Task<List<Hospital>> SearchAsync(string keyword, int numberOfResults);
         Task<List<Hospital>> FindNearestAsync(double latitude, double longtitude, int numberOfResults);
     }
 }

@@ -18,9 +18,13 @@ namespace HospitalFinder.API.DTOs
         [MaxLength(150)]
         public string? Address { get; set; }
 
-        public string Latitude { get; set; }
+        public double Latitude { get; set; }
 
-        public string Longtitude { get; set; }
+        public double Longtitude { get; set; }
+
+        public string LatitudeDMS { get; set; }
+
+        public string LongtitudeDMS { get; set; }
 
         public int? OpenTime { get; set; }
 

@@ -54,13 +54,12 @@ namespace HospitalFinder.Services
             await _repository.UpdateAsync(entity);
         }
 
-        public async Task<List<Hospital>> SearchAsync(string keyword, int pageNumber, int numberOfResultsPerPage)
+        public async Task<List<Hospital>> SearchAsync(string keyword, int numberOfResults)
         {
             List<Hospital> entityList = await ListAsync();
 
             return entityList.Where(x => x.Name.Contains(keyword) || x.City.Contains(keyword) || x.Country.Contains(keyword))
-           .Skip((pageNumber - 1) * numberOfResultsPerPage)
-           .Take(numberOfResultsPerPage)
+           .Take(numberOfResults)
            .ToList();
         }
 
