@@ -1,10 +1,5 @@
 ﻿using HospitalFinder.Core.Database;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HospitalFinder.Core.DataAccess
 {
@@ -12,7 +7,7 @@ namespace HospitalFinder.Core.DataAccess
     {
         #region Properties and fields
 
-        private HospitalFinderContext _context { get; }
+        private protected HospitalFinderContext _context { get; }
 
         #endregion
 
