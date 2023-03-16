@@ -13,7 +13,7 @@ namespace HospitalFinder.API.Controllers
 {
     [Route("api/")]
     [ApiController]
-    public class HospitalFinder : ControllerBase
+    public class HospitalFinderController : ControllerBase
     {
         #region Properties and fields
 
@@ -25,7 +25,7 @@ namespace HospitalFinder.API.Controllers
 
         #region Constructor
 
-        public HospitalFinder(IHospitalService hospitalService, IHospitalUpdateService hospitalUpdateService)
+        public HospitalFinderController(IHospitalService hospitalService, IHospitalUpdateService hospitalUpdateService)
         {
             _hospitalService = hospitalService;
             _hospitalUpdateService = hospitalUpdateService;

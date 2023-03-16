@@ -17,6 +17,10 @@ builder.Services.AddControllers().AddNewtonsoftJson(s =>
 });
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ILockoutRepository, LockoutRepository>();
+
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IHospitalService, HospitalService>();
 builder.Services.AddScoped<IHospitalUpdateService, HospitalUpdateService>();
 
