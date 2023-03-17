@@ -57,7 +57,7 @@ namespace HospitalFinder.Domain.HospitalData
 
         #region
 
-        public int HospitalId { get; set; }
+        public int? HospitalId { get; set; }
         public virtual Hospital Hospital { get; set; }
 
         #endregion

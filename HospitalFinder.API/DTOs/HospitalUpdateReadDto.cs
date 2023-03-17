@@ -33,7 +33,7 @@ namespace HospitalFinder.API.DTOs
         [MaxLength(30)]
         public string? Website { get; set; }
 
-        public int HospitalId { get; set; }
+        public int? HospitalId { get; set; }
 
     }
 }
