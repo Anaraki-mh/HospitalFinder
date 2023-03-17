@@ -37,7 +37,7 @@ namespace HospitalFinder.API.Controllers
         #region Methods
 
         //GET api/Search/{keyword}+{numberOfResults}
-        [HttpGet("Search/{keyword}/{numberOfResults?}")]
+        [HttpGet("Search/{keyword}/{numberOfResults?}", Name = "Search")]
         public async Task<ActionResult<IEnumerable<HospitalReadDto>>> SearchAsync(string keyword, int numberOfResults = 1)
         {
             if (numberOfResults < 1)
@@ -95,7 +95,7 @@ namespace HospitalFinder.API.Controllers
                     Website = model.Website,
                 };
                 await _hospitalUpdateService.CreateAsync(hospitalUpdateEntity);
-                return CreatedAtRoute(nameof(SearchAsync), new { keyword = hospitalUpdateEntity.Name }, hospitalUpdateEntity);
+                return CreatedAtRoute("Search", new { keyword = hospitalUpdateEntity.Name }, hospitalUpdateEntity);
             }
             return BadRequest(model);
 

@@ -209,7 +209,7 @@ namespace HospitalFinder.API.Controllers
                 UpdateDateTime = DateTime.UtcNow,
             };
             await _hospitalService.CreateAsync(hospitalEntity);
-            return CreatedAtRoute(nameof(GetHospitalAsync), new { keyword = hospitalEntity.Name }, hospitalEntity);
+            return CreatedAtRoute("GetHospital", new { keyword = token , keyword = hospitalEntity.Id }, hospitalEntity);
         }
 
         [HttpPut("UpdateHospital/{token}/{id}")]
