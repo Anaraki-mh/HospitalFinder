@@ -12,14 +12,14 @@ namespace HospitalFinder.Services
     {
         #region Fields and Properties
 
-        private IRepository<Hospital> _repository { get; }
+        private IHospitalRepository _repository { get; }
 
         #endregion
 
 
         #region Constructor
 
-        public HospitalService(IRepository<Hospital> repository)
+        public HospitalService(IHospitalRepository repository)
         {
             _repository = repository;
         }
@@ -65,8 +65,10 @@ namespace HospitalFinder.Services
 
         public async Task<List<Hospital>> FindNearestAsync(double latitude, double longtitude, int numberOfResults)
         {
-            List<Hospital> entityList = await ListAsync();
+            // Get hospitals in a 10 degree by 10 degree square around the target
+            List<Hospital> entityList = await _repository.GetHospitalsInRange(longtitude - 5, longtitude + 5, latitude - 5, latitude + 5);
 
+            // Order the results based on how close they are to the target
             return entityList.OrderBy(x =>
             (latitude - x.Latitude) * (latitude - x.Latitude) +
             (longtitude - x.Longtitude) * (longtitude - x.Longtitude))
