@@ -38,16 +38,16 @@ namespace HospitalFinder.API.Controllers
 
             if (!signupSuccessful)
             {
-                return CreatedAtRoute(nameof(SignUp), new ErrorDto
+                return BadRequest(new ErrorDto
                 {
                     Error = "Invalid email address.",
                     Solution = "Please use a different email address to sign up."
                 });
             }
 
-            return CreatedAtRoute(nameof(SignUp), new SignUpResponseDto
+            return CreatedAtAction("Login", new SignUpResponseDto
             {
-                Email= signUpModel.Email,
+                Email = signUpModel.Email,
                 PasswordHash = Hash.SHA256(signUpModel.Password),
             });
         }
@@ -66,8 +66,8 @@ namespace HospitalFinder.API.Controllers
             {
                 return NotFound(new ErrorDto
                 {
-                    Error = "User not found.",
-                    Solution = "Please make sure the email is typed correctly."
+                    Error = "Wrong email or password.",
+                    Solution = "Please make sure the email and password are typed correctly. Note that entering a wrong password 5 times will result in a 1 hour lockout."
                 });
             }
 
@@ -76,8 +76,8 @@ namespace HospitalFinder.API.Controllers
                 await _accountService.Lockout(HttpContext.Connection.RemoteIpAddress.ToString());
                 return Unauthorized(new ErrorDto
                 {
-                    Error = "Wrong password.",
-                    Solution = "Please make sure the password is typed correctly. Entering a wrong password 5 times will result in a 1 hour lockout."
+                    Error = "Wrong email or password.",
+                    Solution = "Please make sure the email and password are typed correctly. Note that entering a wrong password 5 times will result in a 1 hour lockout."
                 });
             }
 
