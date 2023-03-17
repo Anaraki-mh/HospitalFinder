@@ -38,7 +38,7 @@ namespace HospitalFinder.API.Controllers
 
             if (!signupSuccessful)
             {
-                return BadRequest(new ErrorDto
+                return CreatedAtAction("Login" ,new ErrorDto
                 {
                     Error = "Invalid email address.",
                     Solution = "Please use a different email address to sign up."
