@@ -96,7 +96,7 @@ namespace HospitalFinder.WebEssentials.Coordinate
 
 
             // The degrees, minutes and seconds are are displayed in the correct format
-            return $"{degree:0}° {min}' {sec}\"";
+            return $"{degree:0}° {min:0}' {sec}\"";
         }
     }
 }

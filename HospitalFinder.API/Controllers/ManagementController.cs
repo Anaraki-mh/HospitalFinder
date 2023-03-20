@@ -71,7 +71,7 @@ namespace HospitalFinder.API.Controllers
                     CloseTime = entity.CloseTime,
                     Telephone = entity.Telephone,
                     Website = entity.Website,
-                    GoogleMapsLink = entity.GoogleMapsLink ?? "",
+                    GoogleMapsLink = WebEssentials.Url.GenerateGoogleMapsLink(entity.Latitude, entity.Longtitude),
                 });
             }
 
@@ -145,7 +145,7 @@ namespace HospitalFinder.API.Controllers
                 CloseTime = entity.CloseTime,
                 Telephone = entity.Telephone,
                 Website = entity.Website,
-                GoogleMapsLink = entity.GoogleMapsLink ?? "",
+                GoogleMapsLink = WebEssentials.Url.GenerateGoogleMapsLink(entity.Latitude, entity.Longtitude),
             };
 
             return Ok(model);
@@ -193,7 +193,7 @@ namespace HospitalFinder.API.Controllers
             if (ModelState.IsValid)
                 return BadRequest(model);
 
-            var hospitalEntity = new Hospital
+            var entity = new Hospital
             {
                 Name = model.Name,
                 City = model.City,
@@ -208,8 +208,25 @@ namespace HospitalFinder.API.Controllers
                 CreateDateTime = DateTime.UtcNow,
                 UpdateDateTime = DateTime.UtcNow,
             };
-            await _hospitalService.CreateAsync(hospitalEntity);
-            return CreatedAtRoute("GetHospital", new { token = token , id = hospitalEntity.Id }, hospitalEntity);
+            await _hospitalService.CreateAsync(entity);
+            var readDto = new HospitalReadDto()
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                City = entity.City,
+                Country = entity.Country,
+                Address = entity.Address,
+                Latitude = entity.Latitude,
+                Longtitude = entity.Longtitude,
+                LatitudeDMS = Convert.ToDMS(entity.Latitude),
+                LongtitudeDMS = Convert.ToDMS(entity.Longtitude),
+                OpenTime = entity.OpenTime,
+                CloseTime = entity.CloseTime,
+                Telephone = entity.Telephone,
+                Website = entity.Website,
+                GoogleMapsLink = WebEssentials.Url.GenerateGoogleMapsLink(entity.Latitude, entity.Longtitude),
+            };
+            return CreatedAtRoute("GetHospital", new { token = token , id = readDto.Id }, readDto);
         }
 
         [HttpPut("UpdateHospital/{token}/{id}")]
@@ -222,24 +239,24 @@ namespace HospitalFinder.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var hospitalEntity = await _hospitalService.FindByIdAsync(id);
+            var entity = await _hospitalService.FindByIdAsync(id);
 
-            if (hospitalEntity is null || hospitalEntity?.Id == 0)
+            if (entity is null || entity?.Id == 0)
                 return NotFound();
 
-            hospitalEntity.Name = model.Name;
-            hospitalEntity.City = model.City;
-            hospitalEntity.Country = model.Country;
-            hospitalEntity.Address = model.Address;
-            hospitalEntity.Latitude = model.Latitude;
-            hospitalEntity.Longtitude = model.Longtitude;
-            hospitalEntity.OpenTime = model.OpenTime;
-            hospitalEntity.CloseTime = model.CloseTime;
-            hospitalEntity.Telephone = model.Telephone;
-            hospitalEntity.Website = model.Website;
-            hospitalEntity.UpdateDateTime = DateTime.UtcNow;
+            entity.Name = model.Name;
+            entity.City = model.City;
+            entity.Country = model.Country;
+            entity.Address = model.Address;
+            entity.Latitude = model.Latitude;
+            entity.Longtitude = model.Longtitude;
+            entity.OpenTime = model.OpenTime;
+            entity.CloseTime = model.CloseTime;
+            entity.Telephone = model.Telephone;
+            entity.Website = model.Website;
+            entity.UpdateDateTime = DateTime.UtcNow;
 
-            await _hospitalService.UpdateAsync(hospitalEntity);
+            await _hospitalService.UpdateAsync(entity);
             return NoContent();
         }
 

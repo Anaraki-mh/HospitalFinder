@@ -48,9 +48,6 @@ namespace HospitalFinder.Domain.HospitalData
         [MaxLength(50)]
         public string? Website { get; set; }
 
-        [MaxLength(75)]
-        public string? GoogleMapsLink { get; set; }
-
         #endregion
 
 

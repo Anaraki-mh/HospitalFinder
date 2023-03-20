@@ -2,6 +2,7 @@
 using HospitalFinder.Domain.Enums;
 using HospitalFinder.Domain.HospitalData;
 using HospitalFinder.Services;
+using HospitalFinder.WebEssentials;
 using HospitalFinder.WebEssentials.Coordinate;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -66,7 +67,7 @@ namespace HospitalFinder.API.Controllers
                     CloseTime = entity.CloseTime,
                     Telephone = entity.Telephone,
                     Website = entity.Website,
-                    GoogleMapsLink = entity.GoogleMapsLink ?? "",
+                    GoogleMapsLink = WebEssentials.Url.GenerateGoogleMapsLink(entity.Latitude, entity.Longtitude),
                 });
             }
 
@@ -79,7 +80,7 @@ namespace HospitalFinder.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var hospitalUpdateEntity = new HospitalUpdate
+                var entity = new HospitalUpdate
                 {
                     OperationType = HospitalUpdateOperation.Add,
 
@@ -94,8 +95,23 @@ namespace HospitalFinder.API.Controllers
                     Telephone = model.Telephone,
                     Website = model.Website,
                 };
-                await _hospitalUpdateService.CreateAsync(hospitalUpdateEntity);
-                return CreatedAtRoute("Search", new { keyword = hospitalUpdateEntity.Name }, hospitalUpdateEntity);
+                await _hospitalUpdateService.CreateAsync(entity);
+                var readDto = new HospitalUpdateReadDto()
+                {
+                    OperationType= HospitalUpdateOperation.Add,
+                    Id = entity.Id,
+                    Name = entity.Name,
+                    City = entity.City,
+                    Country = entity.Country,
+                    Address = entity.Address,
+                    Latitude = entity.Latitude,
+                    Longtitude = entity.Longtitude,
+                    OpenTime = entity.OpenTime,
+                    CloseTime = entity.CloseTime,
+                    Telephone = entity.Telephone,
+                    Website = entity.Website,
+                };
+                return CreatedAtRoute("Search", new { keyword = readDto.Name }, readDto);
             }
             return BadRequest(model);
 
@@ -105,9 +121,9 @@ namespace HospitalFinder.API.Controllers
         [HttpPut("Update/{id}")]
         public async Task<ActionResult> UpdateAsync(int id, HospitalUpdateCreateDto model)
         {
-            var hospitalEntity = await _hospitalService.FindByIdAsync(id);
+            var entity = await _hospitalService.FindByIdAsync(id);
 
-            if (hospitalEntity is null || hospitalEntity?.Id == 0)
+            if (entity is null || entity?.Id == 0)
                 return NotFound();
 
             if (ModelState.IsValid)
@@ -158,7 +174,7 @@ namespace HospitalFinder.API.Controllers
                     CloseTime = entity.CloseTime,
                     Telephone = entity.Telephone,
                     Website = entity.Website,
-                    GoogleMapsLink = entity.GoogleMapsLink ?? "",
+                    GoogleMapsLink = WebEssentials.Url.GenerateGoogleMapsLink(entity.Latitude, entity.Longtitude),
                 });
             }
             return Ok(modelList);
