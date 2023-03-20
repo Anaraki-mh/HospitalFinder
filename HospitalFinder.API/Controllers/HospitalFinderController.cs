@@ -78,43 +78,41 @@ namespace HospitalFinder.API.Controllers
         [HttpPost("Create")]
         public async Task<ActionResult<HospitalReadDto>> CreateAsync(HospitalUpdateCreateDto model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return BadRequest(model);
+
+            var entity = new HospitalUpdate
             {
-                var entity = new HospitalUpdate
-                {
-                    OperationType = HospitalUpdateOperation.Add,
+                OperationType = HospitalUpdateOperation.Add,
 
-                    Name = model.Name,
-                    City = model.City,
-                    Country = model.Country,
-                    Address = model.Address,
-                    Latitude = model.Latitude,
-                    Longtitude = model.Longtitude,
-                    OpenTime = model.OpenTime,
-                    CloseTime = model.CloseTime,
-                    Telephone = model.Telephone,
-                    Website = model.Website,
-                };
-                await _hospitalUpdateService.CreateAsync(entity);
-                var readDto = new HospitalUpdateReadDto()
-                {
-                    OperationType= HospitalUpdateOperation.Add,
-                    Id = entity.Id,
-                    Name = entity.Name,
-                    City = entity.City,
-                    Country = entity.Country,
-                    Address = entity.Address,
-                    Latitude = entity.Latitude,
-                    Longtitude = entity.Longtitude,
-                    OpenTime = entity.OpenTime,
-                    CloseTime = entity.CloseTime,
-                    Telephone = entity.Telephone,
-                    Website = entity.Website,
-                };
-                return CreatedAtRoute("Search", new { keyword = readDto.Name }, readDto);
-            }
-            return BadRequest(model);
-
+                Name = model.Name,
+                City = model.City,
+                Country = model.Country,
+                Address = model.Address,
+                Latitude = model.Latitude,
+                Longtitude = model.Longtitude,
+                OpenTime = model.OpenTime,
+                CloseTime = model.CloseTime,
+                Telephone = model.Telephone,
+                Website = model.Website,
+            };
+            await _hospitalUpdateService.CreateAsync(entity);
+            var readDto = new HospitalUpdateReadDto()
+            {
+                OperationType = HospitalUpdateOperation.Add,
+                Id = entity.Id,
+                Name = entity.Name,
+                City = entity.City,
+                Country = entity.Country,
+                Address = entity.Address,
+                Latitude = entity.Latitude,
+                Longtitude = entity.Longtitude,
+                OpenTime = entity.OpenTime,
+                CloseTime = entity.CloseTime,
+                Telephone = entity.Telephone,
+                Website = entity.Website,
+            };
+            return CreatedAtRoute("Search", new { keyword = readDto.Name }, readDto);
         }
 
         //PUT api/{id}
@@ -126,26 +124,26 @@ namespace HospitalFinder.API.Controllers
             if (entity is null || entity?.Id == 0)
                 return NotFound();
 
-            if (ModelState.IsValid)
-            {
-                var hospitalUpdateEntity = new HospitalUpdate
-                {
-                    OperationType = HospitalUpdateOperation.Update,
-                    HospitalId = id,
+            if (!ModelState.IsValid)
+                return BadRequest();
 
-                    Name = model.Name,
-                    City = model.City,
-                    Country = model.Country,
-                    Address = model.Address,
-                    Latitude = model.Latitude,
-                    Longtitude = model.Longtitude,
-                    OpenTime = model.OpenTime,
-                    CloseTime = model.CloseTime,
-                    Telephone = model.Telephone,
-                    Website = model.Website,
-                };
-                await _hospitalUpdateService.CreateAsync(hospitalUpdateEntity);
-            }
+            var hospitalUpdateEntity = new HospitalUpdate
+            {
+                OperationType = HospitalUpdateOperation.Update,
+                HospitalId = id,
+
+                Name = model.Name,
+                City = model.City,
+                Country = model.Country,
+                Address = model.Address,
+                Latitude = model.Latitude,
+                Longtitude = model.Longtitude,
+                OpenTime = model.OpenTime,
+                CloseTime = model.CloseTime,
+                Telephone = model.Telephone,
+                Website = model.Website,
+            };
+            await _hospitalUpdateService.CreateAsync(hospitalUpdateEntity);
             return NoContent();
         }
 

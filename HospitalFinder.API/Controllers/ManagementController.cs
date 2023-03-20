@@ -190,7 +190,7 @@ namespace HospitalFinder.API.Controllers
             if (tokenValidity == false)
                 return Unauthorized();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(model);
 
             var entity = new Hospital
