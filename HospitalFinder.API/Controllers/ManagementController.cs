@@ -226,7 +226,7 @@ namespace HospitalFinder.API.Controllers
                 Website = entity.Website,
                 GoogleMapsLink = WebEssentials.Url.GenerateGoogleMapsLink(entity.Latitude, entity.Longtitude),
             };
-            return CreatedAtRoute("GetHospital", new { token = token , id = readDto.Id }, readDto);
+            return CreatedAtAction("GetHospital", new { token = token , id = readDto.Id }, readDto);
         }
 
         [HttpPut("UpdateHospital/{token}/{id}")]

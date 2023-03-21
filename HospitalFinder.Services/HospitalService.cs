@@ -41,7 +41,7 @@ namespace HospitalFinder.Services
         public async Task<Hospital>? FindByIdAsync(int id)
         {
             List<Hospital> entityList = await _repository.ListAsync();
-            return entityList?.FirstOrDefault(x => x.Id == id) ?? new Hospital();
+            return entityList?.FirstOrDefault(x => x.Id == id);
         }
 
         public async Task<List<Hospital>> ListAsync()
