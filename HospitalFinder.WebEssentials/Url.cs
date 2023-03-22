@@ -21,14 +21,5 @@ namespace HospitalFinder.WebEssentials
             }
             return title;
         }
-
-        public static string GenerateGoogleMapsLink(double latitude, double longtitude)
-        {
-            string convertedLatitude = Coordinate.Convert.ToDMS(latitude).Replace(" ", "") + (latitude >= 0 ? "N" : "S");
-            string convertedLongtitude = Coordinate.Convert.ToDMS(longtitude).Replace(" ", "") + (longtitude >= 0 ? "E" : "W");
-
-            string googleMapsLink = $"https://www.google.com/maps/place/{convertedLatitude}+{convertedLongtitude}";
-            return googleMapsLink;
-        }
     }
 }

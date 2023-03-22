@@ -71,7 +71,7 @@ namespace HospitalFinder.API.Controllers
                     CloseTime = entity.CloseTime,
                     Telephone = entity.Telephone,
                     Website = entity.Website,
-                    GoogleMapsLink = WebEssentials.Url.GenerateGoogleMapsLink(entity.Latitude, entity.Longtitude),
+                    GoogleMapsLink = $"https://www.google.com/maps/place/{entity.Latitude}+{entity.Longtitude}",
                 });
             }
 
@@ -145,7 +145,7 @@ namespace HospitalFinder.API.Controllers
                 CloseTime = entity.CloseTime,
                 Telephone = entity.Telephone,
                 Website = entity.Website,
-                GoogleMapsLink = WebEssentials.Url.GenerateGoogleMapsLink(entity.Latitude, entity.Longtitude),
+                GoogleMapsLink = $"https://www.google.com/maps/place/{entity.Latitude}+{entity.Longtitude}",
             };
 
             return Ok(model);
@@ -224,7 +224,7 @@ namespace HospitalFinder.API.Controllers
                 CloseTime = entity.CloseTime,
                 Telephone = entity.Telephone,
                 Website = entity.Website,
-                GoogleMapsLink = WebEssentials.Url.GenerateGoogleMapsLink(entity.Latitude, entity.Longtitude),
+                GoogleMapsLink = $"https://www.google.com/maps/place/{entity.Latitude}+{entity.Longtitude}",
             };
             return CreatedAtAction("GetHospital", new { token = token , id = readDto.Id }, readDto);
         }
