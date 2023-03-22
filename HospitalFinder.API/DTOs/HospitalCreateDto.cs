@@ -7,7 +7,7 @@ namespace HospitalFinder.API.DTOs
     {
 
         [Required]
-        [MaxLength(30)]
+        [MaxLength(75)]
         public string Name { get; set; }
 
         [Required]
@@ -33,7 +33,7 @@ namespace HospitalFinder.API.DTOs
 
         public long? Telephone { get; set; }
 
-        [MaxLength(30)]
+        [MaxLength(50)]
         public string? Website { get; set; }
     }
 }
